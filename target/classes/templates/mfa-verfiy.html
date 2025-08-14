@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Aziz BookShop - Verify Your Identity</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .mfa-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .mfa-icon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #2563eb;
+        }
+
+        .mfa-code-input {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .mfa-code-input input {
+            width: 45px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            margin: 0 5px;
+        }
+
+        .mfa-code-input input:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .mfa-timer {
+            text-align: center;
+            color: #6b7280;
+            margin: 15px 0;
+        }
+
+        .mfa-timer.warning {
+            color: #ef4444;
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .resend-link button {
+            background: none;
+            border: none;
+            color: #2563eb;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .resend-link button:disabled {
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="mfa-container">
+        <div class="mfa-icon">🔐</div>
+
+        <h1 style="text-align: center;">Two-Factor Authentication</h1>
+
+        <p style="text-align: center; color: #6b7280;" th:if="${message}" th:text="${message}">
+            Please enter the verification code sent to your email
+        </p>
+
+        <div th:if="${error}" class="error" style="margin: 15px 0;">
+            <span th:text="${error}"></span>
+        </div>
+
+        <form th:action="@{/mfa-verify}" method="post" id="mfaForm">
+            <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}"/>
+
+            <div class="mfa-code-input" id="codeInputs">
+                <input type="text" maxlength="1" pattern="[0-9]" required autofocus>
+                <input type="text" maxlength="1" pattern="[0-9]" required>
+                <input type="text" maxlength="1" pattern="[0-9]" required>
+                <input type="text" maxlength="1" pattern="[0-9]" required>
+                <input type="text" maxlength="1" pattern="[0-9]" required>
+                <input type="text" maxlength="1" pattern="[0-9]" required>
+            </div>
+
+            <input type="hidden" id="mfaCode" name="mfaCode">
+
+            <div class="mfa-timer" id="timer">
+                Code expires in: <span id="timeRemaining">5:00</span>
+            </div>
+
+            <button type="submit" style="width: 100%;">Verify</button>
+        </form>
+
+        <div class="resend-link">
+            <button id="resendButton" disabled>
+                Resend code <span id="resendTimer">(60s)</span>
+            </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a th:href="@{/logout}">Cancel and return to login</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // MFA Code Input Handler
+    const inputs = document.querySelectorAll('.mfa-code-input input');
+    const mfaCodeField = document.getElementById('mfaCode');
+    const form = document.getElementById('mfaForm');
+
+    inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            if (e.target.value) {
+                // Move to next input
+                if (index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+
+                // Check if all inputs are filled
+                if (Array.from(inputs).every(i => i.value)) {
+                    // Combine all values
+                    const code = Array.from(inputs).map(i => i.value).join('');
+                    mfaCodeField.value = code;
+
+                    // Auto-submit if all 6 digits are entered
+                    setTimeout(() => form.submit(), 100);
+                }
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            // Handle backspace
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+
+            // Handle paste
+            if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                navigator.clipboard.readText().then(text => {
+                    const digits = text.replace(/\D/g, '').slice(0, 6);
+                    digits.split('').forEach((digit, i) => {
+                        if (inputs[i]) {
+                            inputs[i].value = digit;
+                        }
+                    });
+
+                    if (digits.length === 6) {
+                        mfaCodeField.value = digits;
+                        setTimeout(() => form.submit(), 100);
+                    }
+                });
+            }
+        });
+    });
+
+    // Timer countdown
+    let timeLeft = 300; // 5 minutes in seconds
+    const timerElement = document.getElementById('timeRemaining');
+    const timerContainer = document.getElementById('timer');
+
+    const updateTimer = () => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        if (timeLeft <= 60) {
+            timerContainer.classList.add('warning');
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerElement.textContent = 'Expired';
+            inputs.forEach(input => input.disabled = true);
+            document.querySelector('button[type="submit"]').disabled = true;
+        }
+
+        timeLeft--;
+    };
+
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    // Resend button timer
+    let resendTimeLeft = 60;
+    const resendButton = document.getElementById('resendButton');
+    const resendTimerSpan = document.getElementById('resendTimer');
+
+    const updateResendTimer = () => {
+        if (resendTimeLeft > 0) {
+            resendTimerSpan.textContent = `(${resendTimeLeft}s)`;
+            resendTimeLeft--;
+        } else {
+            clearInterval(resendInterval);
+            resendButton.disabled = false;
+            resendTimerSpan.textContent = '';
+        }
+    };
+
+    const resendInterval = setInterval(updateResendTimer, 1000);
+
+    // Resend code handler
+    resendButton.addEventListener('click', () => {
+        fetch('/mfa-resend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="${_csrf?.parameterName}"]')?.value
+            }
+        }).then(response => {
+            if (response.ok) {
+                // Reset timers
+                timeLeft = 300;
+                resendTimeLeft = 60;
+                resendButton.disabled = true;
+
+                // Clear inputs
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.disabled = false;
+                });
+                inputs[0].focus();
+
+                // Show success message
+                const successMsg = document.createElement('div');
+                successMsg.className = 'success';
+                successMsg.style.margin = '15px 0';
+                successMsg.innerHTML = '<span>A new verification code has been sent to your email</span>';
+                form.insertBefore(successMsg, form.firstChild);
+
+                setTimeout(() => successMsg.remove(), 5000);
+            }
+        });
+    });
+
+    // Prevent form submission if code not complete
+    form.addEventListener('submit', (e) => {
+        const code = Array.from(inputs).map(i => i.value).join('');
+        if (code.length !== 6) {
+            e.preventDefault();
+            inputs[0].focus();
+        } else {
+            mfaCodeField.value = code;
+        }
+    });
+</script>
+</body>
+</html>

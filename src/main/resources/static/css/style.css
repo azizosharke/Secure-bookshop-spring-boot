@@ -1,0 +1,505 @@
+/* Modern BookShop CSS */
+
+/* CSS Variables for easy theming */
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary-color: #10b981;
+    --danger-color: #ef4444;
+    --dark-bg: #1f2937;
+    --light-bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--light-bg);
+    min-height: 100vh;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: transparent;
+    min-height: 100vh;
+}
+
+/* Header/Navigation */
+nav {
+    background: linear-gradient(135deg, var(--dark-bg) 0%, #374151 100%);
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    border-radius: 0;
+    margin: 0 -20px 2rem -20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    margin: 0 0.25rem;
+    display: inline-block;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Headings */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--dark-bg);
+    font-weight: 700;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+h2 {
+    font-size: 1.875rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark-bg);
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--dark-bg);
+    font-weight: 600;
+}
+
+/* Cards and Book Grid */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.book-card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.book-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.book-card p {
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.book-card p span {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.book-card form {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Forms and Inputs */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Buttons */
+button[type="submit"],
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button[type="submit"]:hover,
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Special button for "Add to Cart" */
+.book-card button[type="submit"] {
+    width: 100%;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #059669 100%);
+}
+
+.book-card button[type="submit"]:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.book-card input[type="number"] {
+    width: 80px;
+    margin-right: 1rem;
+    text-align: center;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+table th,
+table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+table th {
+    background: linear-gradient(135deg, var(--dark-bg) 0%, #374151 100%);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+}
+
+table tr:hover {
+    background-color: #f9fafb;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+table tfoot th {
+    background: var(--light-bg);
+    color: var(--text-primary);
+    font-size: 1.125rem;
+}
+
+/* Messages */
+.error {
+    background-color: #fee;
+    color: var(--danger-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #fcc;
+    font-weight: 500;
+}
+
+.success {
+    background-color: hsl(158, 80%, 90%);
+    color: hsl(158, 64%, 15%);
+    padding: 2rem;
+    border-radius: 0.75rem;
+    margin-top: 2rem;
+    text-align: center;
+    border: 2px solid hsl(158, 64%, 55%);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    animation: fadeInSlide 0.4s ease-out;
+}
+
+.success h2 {
+    color: hsl(158, 64%, 18%);
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+}
+
+.success a {
+    color: hsl(158, 64%, 20%);
+    font-weight: 600;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.success a:hover {
+    color: hsl(158, 64%, 28%);
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Cart Actions */
+.cart-actions {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+/* Links */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* Action links in tables */
+table a {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 0.25rem;
+    transition: all 0.3s ease;
+}
+
+table a:hover {
+    background-color: var(--primary-hover);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+table a:last-child {
+    background-color: var(--danger-color);
+}
+
+table a:last-child:hover {
+    background-color: #dc2626;
+}
+
+/* Login/Register Forms */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+}
+
+.book-card form {
+    max-width: none;
+    margin: 0;
+    padding: 1rem 0 0 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+/* Home Page Hero */
+.hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    color: white;
+    padding: 4rem 2rem;
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.hero h1 {
+    color: white;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-buttons a {
+    background: white;
+    color: var(--primary-color);
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.hero-buttons a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .book-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    nav {
+        text-align: center;
+        padding: 1rem;
+    }
+
+    nav a {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    table {
+        font-size: 0.875rem;
+    }
+
+    table th,
+    table td {
+        padding: 0.5rem;
+    }
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.book-card,
+table,
+form {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
+}

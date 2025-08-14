@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aziz BookShop - Shopping Cart</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<div class="container">
+    <h1>Shopping Cart</h1>
+
+    <nav>
+        <a th:href="@{/customer/books}">Continue Shopping</a>
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" style="background: none; border: none; color: white; cursor: pointer; text-decoration: underline;">
+                Logout
+            </button>
+        </form>
+    </nav>
+
+    <!-- Success/Info Message for removed items -->
+    <div th:if="${message}" class="success" style="margin: 1rem 0;">
+        <span th:text="${message}"></span>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="error" style="margin: 1rem 0;">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div th:if="${cart != null && !cart.items.isEmpty()}">
+        <table>
+            <thead>
+            <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${cart.items}">
+                <td th:text="${item.book.title}"></td>
+                <td th:text="${item.book.author}"></td>
+                <td th:text="${'$' + #numbers.formatDecimal(item.book.price, 1, 2)}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td>$<span th:text="${#numbers.formatDecimal(item.book.price * item.quantity, 1, 2)}"></span></td>
+                <td>
+                    <form th:action="@{/customer/cart/remove/{id}(id=${item.id})}"
+                          method="post"
+                          onsubmit="return confirm('Are you sure you want to remove this item from your cart?')">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="4">Total:</th>
+                <th th:text="${'$' + #numbers.formatDecimal(cart.totalPrice, 1, 2)}"></th>
+                <th></th>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="cart-actions">
+            <a th:href="@{/customer/checkout}" class="btn-primary">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <div th:if="${cart == null || cart.items.isEmpty()}">
+        <p>Your cart is empty.</p>
+        <a th:href="@{/customer/books}" class="btn-primary">Continue Shopping</a>
+    </div>
+</div>
+</body>
+</html>

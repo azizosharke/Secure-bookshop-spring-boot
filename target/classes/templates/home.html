@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Aziz BookShop - Your trusted online bookstore">
+    <title>Aziz BookShop - Your Online Book Store</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<div class="container">
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <span sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/register}">Register</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <span sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/dashboard}">Admin Dashboard</a>
+            </span>
+            <span sec:authorize="hasRole('CUSTOMER')">
+                <a th:href="@{/customer/books}">Browse Books</a>
+                <a th:href="@{/customer/cart}">Cart</a>
+            </span>
+            <span>Welcome, <span sec:authentication="name"></span>!</span>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" style="background: none; border: none; color: white; cursor: pointer; text-decoration: underline;">
+                    Logout
+                </button>
+            </form>
+        </span>
+    </nav>
+
+    <div class="hero" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <h1 style="text-align: center;">Welcome to Aziz BookShop</h1>
+        <p style="text-align: center;">Discover your next favourite book from our exclusive collection</p>
+        <div class="hero-buttons">
+            <a th:href="@{/customer/books}">Browse Collection</a>
+            <a sec:authorize="!isAuthenticated()" th:href="@{/register}">Join Today</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/customer/cart}">View Cart</a>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 3rem 0;">
+        <h2>Why Choose Aziz BookShop?</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            <div class="book-card" style="text-align: center;">
+                <h3 style="color: #10b981;">📚 Wide Selection</h3>
+                <p style="color: #6b7280;">Browse through our extensive collection of books across all genres</p>
+            </div>
+            <div class="book-card" style="text-align: center;">
+                <h3 style="color: #10b981;">🔒 Secure Shopping</h3>
+                <p style="color: #6b7280;">Shop with confidence with our secure payment system and data protection</p>
+            </div>
+            <div class="book-card" style="text-align: center;">
+                <h3 style="color: #10b981;">💰 Best Prices</h3>
+                <p style="color: #6b7280;">Enjoy competitive prices and special deals on your favorite books</p>
+            </div>
+        </div>
+    </div>
+
+    <div sec:authorize="hasRole('ADMIN')" style="text-align: center; padding: 2rem; background: #f3f4f6; border-radius: 0.5rem; margin: 2rem 0;">
+        <h3>Admin Quick Actions</h3>
+        <div style="margin-top: 1rem;">
+            <a th:href="@{/admin/dashboard}" class="btn-primary">Go to Dashboard</a>
+            <a th:href="@{/admin/book/add}" class="btn-primary" style="margin-left: 1rem;">Add New Book</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

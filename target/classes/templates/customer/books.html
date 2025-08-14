@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aziz BookShop - Browse Books</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<div class="container">
+    <h1>Available Books</h1>
+
+    <nav>
+        <a th:href="@{/}">Home</a>
+        <span sec:authorize="isAuthenticated()">
+            <a th:href="@{/customer/cart}">View Cart</a>
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" style="background: none; border: none; color: white; cursor: pointer; text-decoration: underline;">
+                    Logout
+                </button>
+            </form>
+        </span>
+        <span sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}">Login to Add to Cart</a>
+        </span>
+    </nav>
+
+    <div th:if="${message}" class="success" style="padding: 1rem; margin-bottom: 1rem;">
+        <span th:text="${message}"></span>
+    </div>
+
+    <div th:if="${error}" class="error" style="padding: 1rem; margin-bottom: 1rem;">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div class="book-grid">
+        <div th:each="book : ${books}" class="book-card">
+            <h3 th:text="${book.title}"></h3>
+            <p>Author: <span th:text="${book.author}"></span></p>
+            <p>Year: <span th:text="${book.year}"></span></p>
+            <p>Price: $<span th:text="${#numbers.formatDecimal(book.price, 1, 2)}"></span></p>
+            <p>Available: <span th:text="${book.copies}"></span> copies</p>
+
+            <form sec:authorize="isAuthenticated()"
+                  th:action="@{/customer/cart/add}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="bookId" th:value="${book.id}">
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" value="1" min="1"
+                       th:max="${book.copies}" required>
+                <button type="submit" th:disabled="${book.copies == 0}">
+                    <span th:if="${book.copies > 0}">Add to Cart</span>
+                    <span th:unless="${book.copies > 0}">Out of Stock</span>
+                </button>
+            </form>
+
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}" class="btn-primary">Login to Purchase</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

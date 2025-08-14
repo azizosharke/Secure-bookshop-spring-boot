@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aziz BookShop - Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/password-validation.js}"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Register</h1>
+
+    <div th:if="${success}" class="success">
+        <h2 th:text="${success}">Registration successful!</h2>
+        <p><a th:href="@{/login}">Click here to login</a></p>
+    </div>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <form th:action="@{/register}" method="post" onsubmit="return validatePassword()">
+        <!-- CSRF Token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required
+                   maxlength="50" pattern="[a-zA-Z0-9_]{3,50}">
+            <small>3-50 characters, letters, numbers, and underscores only</small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <small>At least 8 characters with uppercase, lowercase, number, and special character</small>
+            <div id="password-strength"></div>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required maxlength="100">
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" name="surname" required maxlength="100">
+        </div>
+        <div class="form-group">
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" required
+                   max="2010-01-01" min="1900-01-01">
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" required maxlength="500"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" id="phoneNumber" name="phoneNumber" required
+                   pattern="[0-9+\-() ]{10,20}">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required maxlength="255">
+        </div>
+        <button type="submit">Register</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem;">
+        <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
+        <p><a th:href="@{/}">Back to Home</a></p>
+    </div>
+</div>
+</body>
+</html>

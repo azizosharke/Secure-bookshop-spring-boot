@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Aziz BookShop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <div style="text-align: center; padding: 3rem 0;">
+        <h1>Oops! Something went wrong</h1>
+
+        <div class="error" style="margin: 2rem auto; max-width: 600px;">
+            <p th:if="${statusCode}" style="font-size: 3rem; margin: 0;">
+                <span th:text="${statusCode}">Error</span>
+            </p>
+            <p th:text="${errorMessage}" style="margin: 1rem 0;">
+                An unexpected error occurred
+            </p>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <p>We apologize for the inconvenience. Please try one of the following:</p>
+            <div style="margin: 2rem 0;">
+                <a th:href="@{/}" class="btn-primary">Go to Home Page</a>
+                <a href="javascript:history.back()" class="btn-primary" style="margin-left: 1rem;">Go Back</a>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem; color: #6b7280;">
+            <p>If the problem persists, please contact support.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
