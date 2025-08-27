@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
+ // Validate carts
 @Entity
 @Table(name = "carts")
 public class Cart {
@@ -56,4 +56,5 @@ public class Cart {
     public void setItems(List<CartItem> items) {
         this.items = items;
     }
+
 }
