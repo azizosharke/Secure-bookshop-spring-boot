@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+ // Validate application
 @Component
 @Order(1)
 public class SecurityFilterChain implements Filter {
@@ -254,4 +255,5 @@ public class SecurityFilterChain implements Filter {
         }
         return xfHeader.split(",")[0].trim();
     }
+
 }
