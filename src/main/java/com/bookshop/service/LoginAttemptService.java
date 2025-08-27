@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+ // Validate errors 
+
 @Service
 public class LoginAttemptService {
     private static final Logger logger = LoggerFactory.getLogger(LoginAttemptService.class);
@@ -77,4 +79,5 @@ public class LoginAttemptService {
             this.blockedUntil = blockedUntil;
         }
     }
+
 }
