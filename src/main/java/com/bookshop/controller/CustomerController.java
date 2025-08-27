@@ -79,6 +79,8 @@ public class CustomerController {
 
         return "redirect:/customer/books";
     }
+    // test 1
+
 
     @GetMapping("/cart")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
@@ -210,4 +212,5 @@ public class CustomerController {
             return "customer/checkout";
         }
     }
+
 }
