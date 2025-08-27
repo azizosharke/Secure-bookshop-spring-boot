@@ -48,6 +48,8 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         // Create sample books if none exist
+       // Check first
+
         if (bookRepository.count() == 0) {
             bookRepository.save(new Book("Java Programming", "John Doe", 2023,
                     new BigDecimal("49.99"), 10));
@@ -59,4 +61,5 @@ public class DataInitializer implements CommandLineRunner {
             logger.info("Sample books created");
         }
     }
+
 }
