@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+
+        // test exception 
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -317,4 +320,5 @@ public class GlobalExceptionHandler {
         }
         return xfHeader.split(",")[0].trim();
     }
+
 }
