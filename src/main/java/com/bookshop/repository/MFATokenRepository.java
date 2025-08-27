@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+ // Validate token 
 public interface MFATokenRepository extends JpaRepository<MFAToken, Long> {
 
     @Query("SELECT t FROM MFAToken t WHERE t.user.id = :userId " +
@@ -35,4 +36,5 @@ public interface MFATokenRepository extends JpaRepository<MFAToken, Long> {
     @Query("SELECT COUNT(t) FROM MFAToken t WHERE t.user.id = :userId " +
             "AND t.createdAt > :since AND t.used = false")
     long countRecentTokens(@Param("userId") Long userId, @Param("since") LocalDateTime since);
+
 }
