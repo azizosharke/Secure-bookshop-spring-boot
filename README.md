@@ -12,7 +12,7 @@
 
 
 
-### Step 1: Create Essential Files
+### Create Essential Files
 
 #### `.gitignore`
 ```gitignore
