@@ -1,39 +1,18 @@
 # BookShop Spring Boot - GitHub Deployment Guide
 
 ## 📚 Table of Contents
-1. [Initial GitHub Setup](#initial-github-setup)
-2. [Required Configuration Files](#required-configuration-files)
-3. [Environment Configuration](#environment-configuration)
-4. [CI/CD Pipeline Setup](#cicd-pipeline-setup)
-5. [Docker Deployment](#docker-deployment)
-6. [Production Deployment Options](#production-deployment-options)
-7. [Security Best Practices](#security-best-practices)
-8. [Key Components Delivered](#key-components-delivered).
 
----
+1. [Required Configuration Files](#required-configuration-files)
+2. [Environment Configuration](#environment-configuration)
+3. [CI/CD Pipeline Setup](#cicd-pipeline-setup)
+4. [Docker Deployment](#docker-deployment)
+5. [Production Deployment Options](#production-deployment-options)
+6. [Security Best Practices](#security-best-practices)
+7. [Key Components Delivered](#key-components-delivered).
 
-## 🚀 Initial GitHub Setup
 
-### Step 1: Create GitHub Repository
-```bash
-# Initialize local git repository
-git init
 
-# Add all files
-git add .
-
-# Initial commit
-git commit -m "Initial commit: BookShop Spring Boot Application"
-
-# Add GitHub remote (replace with your repository URL)
-git remote add origin https://github.com/azizosharke/bookshop-spring-boot.git
-
-# Push to GitHub
-git branch -M main
-git push -u origin main
-```
-
-### Step 2: Create Essential Files
+### Step 1: Create Essential Files
 
 #### `.gitignore`
 ```gitignore
